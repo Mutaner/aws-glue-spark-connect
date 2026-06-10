@@ -186,7 +186,8 @@ def cmd_start_session(client: boto3.client, args: argparse.Namespace) -> Dict[st
         "Role": args.role_arn,
         "SessionType": "SPARK_CONNECT",
         "Command": {
-            "Name": "spark",
+            "Name": "gluestreaming",
+            "PythonVersion": "3",
         },
     }
 
@@ -420,6 +421,7 @@ def main() -> int:
     if args.endpoint_url:
         client_kwargs["endpoint_url"] = args.endpoint_url
     if args.debug:
+        print("[WARNING] Debug mode enabled. AWS credentials may appear in output. Use only in isolated environments.", file=sys.stderr)
         _setup_debug_logging()
 
     try:
