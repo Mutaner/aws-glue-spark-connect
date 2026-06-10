@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """
-glue-spark-cli.py — CLI для AWS Glue Spark Connect (июнь 2026)
+glue-spark-cli.py — AWS Glue Spark Connect CLI
 
-Управление интерактивными Spark Connect сессиями в AWS Glue:
-  start-session  — Запустить новую Spark Connect сессию
-  list-sessions  — Список всех сессий (с пагинацией и фильтрацией)
-  stop-session   — Остановить сессию по ID
+CLI tool for AWS Glue Spark Connect interactive sessions (June 2026 API).
 
-Зависимости: boto3>=1.43.25 (pip install boto3>=1.43.25)
+Commands:
+  start-session  — Start a new SPARK_CONNECT session
+  list-sessions  — List all sessions (with optional status filter)
+  stop-session   — Stop a session by ID
 
-Примеры:
+Dependencies: boto3>=1.43.25 (pip install -r requirements.txt)
+
+Examples:
   python3 glue-spark-cli.py --region us-east-1 start-session \\
-      --name "Моя Spark сессия" --worker-type G.1X \\
+      --name "Analytics" --worker-type G.1X \\
       --number-of-workers 3 --role-arn arn:aws:iam::123456789012:role/GlueSessionRole
 
   python3 glue-spark-cli.py --region us-east-1 list-sessions --max-results 20
