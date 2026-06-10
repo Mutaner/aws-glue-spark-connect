@@ -144,7 +144,7 @@ Input validation is also handled before any API call:
 
 Need a custom Spark Connect pipeline, multi-region deployment, or integration with your data engineering workflow?
 
-📧 **Email**: [your-email@example.com]  
+📧 **Email**: [alex.o.europe@gmail.com]  
 🔧 **One-time setup**: $200–$500 per script  
 📋 **Enterprise consulting**: Auto-scaling clusters, monitoring, CI/CD integration, custom Spark configurations
 
