@@ -5,7 +5,7 @@ glue_spark_cli.py — AWS Glue Spark Connect CLI
 CLI tool for AWS Glue Spark Connect interactive sessions (June 2026 API).
 
 Commands:
-  start-session  — Start a new SPARK_CONNECT session
+  create-session  — Create (start) a new SPARK_CONNECT session
   list-sessions  — List all sessions (with optional status filter)
   stop-session   — Stop a session by ID
   get-endpoint   — Get Spark Connect endpoint URL + auth token for a session
@@ -13,7 +13,7 @@ Commands:
 Dependencies: boto3>=1.43.25 (pip install -r requirements.txt)
 
 Examples:
-  python3 glue_spark_cli.py --region us-east-1 start-session \\
+  python3 glue_spark_cli.py --region us-east-1 create-session \\
       --name "Analytics" --worker-type G.1X \\
       --number-of-workers 3 --role-arn arn:aws:iam::123456789012:role/GlueSessionRole
 
@@ -299,17 +299,17 @@ def build_parser() -> argparse.ArgumentParser:
             AWS credentials: ~/.aws/credentials or AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY.
 
             Commands:
-              start-session  Launch a SPARK_CONNECT session
+              create-session  Launch a SPARK_CONNECT session (maps to boto3 create_session)
               list-sessions  List sessions (optional status filter)
               stop-session   Stop a session by ID
               get-endpoint   Get Spark Connect gRPC endpoint + token
         """),
         epilog=textwrap.dedent("""\
             Examples:
-              # Start a session
-              python3 glue_spark_cli.py --region us-east-1 start-session \\
+              # Create a session (maps to boto3 create_session)
+              python3 glue_spark_cli.py --region us-east-1 create-session \\
                   --name "Analytics" --worker-type G.1X \\
-                  --number-of-workers 3 --role-arn arn:aws:iam::123456789012:role/GlueSparkRole
+                  --number-of-workers 3 --role-arn arn:aws:iam::1:role/GlueSparkRole
 
               # List sessions
               python3 glue_spark_cli.py --region us-east-1 list-sessions --max-results 20
@@ -331,8 +331,8 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers = parser.add_subparsers(dest="action", required=True, help="Available actions")
 
-    # --- start-session ---
-    start_parser = subparsers.add_parser("start-session", help="Start a Spark Connect session")
+    # --- create-session (maps to boto3 create_session) ---
+    start_parser = subparsers.add_parser("create-session", help="Create (start) a new Spark Connect session")
     start_parser.add_argument("--id", default=None, help="Session ID (UUID). Auto-generated if omitted.")
     start_parser.add_argument("--name", default=None, help="Session description / name")
     start_parser.add_argument(
@@ -361,8 +361,8 @@ def build_parser() -> argparse.ArgumentParser:
         help="Idle timeout in minutes",
     )
     start_parser.add_argument(
-        "--tags", nargs="*", default=None,
-        help="Tags: key=value key=value ...",
+        "--tags", nargs="+", default=None,
+        help="Tags: key=value key=value ... (required if --tags is used)",
     )
 
     # --- list-sessions ---
@@ -429,7 +429,7 @@ def main() -> int:
         return EXIT_FAILURE
 
     action_map: Dict[str, Any] = {
-        "start-session": cmd_start_session,
+        "create-session": cmd_start_session,
         "list-sessions": cmd_list_sessions,
         "stop-session": cmd_stop_session,
         "get-endpoint": cmd_get_endpoint,
