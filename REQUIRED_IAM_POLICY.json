@@ -1,0 +1,25 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "GlueSparkSessionManagement",
+            "Effect": "Allow",
+            "Action": [
+                "glue:CreateSession",
+                "glue:ListSessions",
+                "glue:StopSession",
+                "glue:GetSessionEndpoint",
+                "glue:GetSession"
+            ],
+            "Resource": "*",
+            "Comment": "Restrict to specific Glue session ARNs in production."
+        },
+        {
+            "Sid": "GlueSparkPassRole",
+            "Effect": "Allow",
+            "Action": "iam:PassRole",
+            "Resource": "arn:aws:iam::*:role/GlueSparkRole*",
+            "Comment": "Replace the resource pattern with your actual Glue service role ARN."
+        }
+    ]
+}
